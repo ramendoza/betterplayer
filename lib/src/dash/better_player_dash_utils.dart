@@ -18,8 +18,20 @@ class BetterPlayerDashUtils {
       final document = XmlDocument.parse(data);
       final adaptationSets = document.findAllElements('AdaptationSet');
       adaptationSets.forEach((node) {
-        final mimeType = node.getAttribute('mimeType');
+        var mimeType = node.getAttribute('mimeType');
 
+        if (mimeType == null) {
+          mimeType = node.getAttribute('contentType');
+        }
+
+        if (mimeType == null) {
+          final representations = node.findAllElements('Representation');
+          representations.forEach((representation) {
+            if (mimeType == null) {
+              mimeType = representation.getAttribute('mimeType');
+            }
+          });
+        }
         if (mimeType != null) {
           if (MimeTypes.isVideo(mimeType)) {
             tracks = tracks + parseVideo(node);
@@ -65,17 +77,18 @@ class BetterPlayerDashUtils {
     final String segmentAlignmentStr =
         node.getAttribute('segmentAlignment') ?? '';
     String? label = node.getAttribute('label');
-    final String? language = node.getAttribute('lang');
+    final String? language = node.getAttribute('lang') ?? 'und';
     final String? mimeType = node.getAttribute('mimeType');
 
-    label ??= language;
+    label ??= 'Audio ${index + 1}';
 
     return BetterPlayerAsmsAudioTrack(
         id: index,
         segmentAlignment: segmentAlignmentStr.toLowerCase() == 'true',
         label: label,
         language: language,
-        mimeType: mimeType);
+        mimeType: mimeType
+    );
   }
 
   static BetterPlayerAsmsSubtitle parseSubtitle(
