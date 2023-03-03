@@ -56,12 +56,23 @@ class BetterPlayerDashUtils {
     final representations = node.findAllElements('Representation');
 
     representations.forEach((representation) {
+      print(representation);
       final String? id = representation.getAttribute('id');
       final int width = int.parse(representation.getAttribute('width') ?? '0');
       final int height =
           int.parse(representation.getAttribute('height') ?? '0');
-      final int bitrate =
-          int.parse(representation.getAttribute('bandwidth') ?? '0');
+      String bandwidth = representation.getAttribute('bandwidth') ?? '0';
+      int bitrate = 0;
+      // if (bandwidth.contains('/')) {
+      //   try {
+      //     final List<String> numbers = bandwidth.split('/');
+      //     final double bandwidthCalculate = double.parse(numbers.elementAt(0)) /
+      //         double.parse(numbers.elementAt(1));
+      //     bitrate = bandwidthCalculate.toInt();
+      //   } catch (_) {}
+      // } else {
+      //   bitrate = int.parse(bandwidth);
+      // }
       final int frameRate =
           int.parse(representation.getAttribute('frameRate') ?? '0');
       final String? codecs = representation.getAttribute('codecs');
@@ -78,7 +89,7 @@ class BetterPlayerDashUtils {
         node.getAttribute('segmentAlignment') ?? '';
     String? label = node.getAttribute('label');
     final String? language = node.getAttribute('lang') ?? 'und';
-    final String? mimeType = node.getAttribute('mimeType');
+    final String? mimeType = node.getAttribute('mimeType') ?? 'audio/mp4';
 
     label ??= 'Audio ${index + 1}';
 
@@ -87,8 +98,7 @@ class BetterPlayerDashUtils {
         segmentAlignment: segmentAlignmentStr.toLowerCase() == 'true',
         label: label,
         language: language,
-        mimeType: mimeType
-    );
+        mimeType: mimeType);
   }
 
   static BetterPlayerAsmsSubtitle parseSubtitle(
