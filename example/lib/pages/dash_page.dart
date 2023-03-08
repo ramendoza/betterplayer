@@ -15,6 +15,7 @@ class _DashPageState extends State<DashPage> {
     BetterPlayerConfiguration betterPlayerConfiguration =
         BetterPlayerConfiguration(
       aspectRatio: 16 / 9,
+      autoPlay: true,
       fit: BoxFit.contain,
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
@@ -41,8 +42,7 @@ class _DashPageState extends State<DashPage> {
               style: TextStyle(fontSize: 16),
             ),
           ),
-          AspectRatio(
-            aspectRatio: 16 / 9,
+          Expanded(
             child: BetterPlayer(controller: _betterPlayerController),
           ),
         ],

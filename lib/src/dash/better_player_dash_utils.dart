@@ -56,25 +56,34 @@ class BetterPlayerDashUtils {
     final representations = node.findAllElements('Representation');
 
     representations.forEach((representation) {
-      print(representation);
       final String? id = representation.getAttribute('id');
       final int width = int.parse(representation.getAttribute('width') ?? '0');
       final int height =
           int.parse(representation.getAttribute('height') ?? '0');
       String bandwidth = representation.getAttribute('bandwidth') ?? '0';
       int bitrate = 0;
-      // if (bandwidth.contains('/')) {
-      //   try {
-      //     final List<String> numbers = bandwidth.split('/');
-      //     final double bandwidthCalculate = double.parse(numbers.elementAt(0)) /
-      //         double.parse(numbers.elementAt(1));
-      //     bitrate = bandwidthCalculate.toInt();
-      //   } catch (_) {}
-      // } else {
-      //   bitrate = int.parse(bandwidth);
-      // }
-      final int frameRate =
-          int.parse(representation.getAttribute('frameRate') ?? '0');
+      if (bandwidth.contains('/')) {
+        try {
+          final List<String> numbers = bandwidth.split('/');
+          final double bandwidthCalculate = double.parse(numbers.elementAt(0)) /
+              double.parse(numbers.elementAt(1));
+          bitrate = bandwidthCalculate.round();
+        } catch (_) {}
+      } else {
+        bitrate = int.parse(bandwidth);
+      }
+      String fr = representation.getAttribute('frameRate') ?? '0';
+      int frameRate = 0;
+      if (fr.contains('/')) {
+        try {
+          final List<String> numbers = fr.split('/');
+          final double bandwidthCalculate = double.parse(numbers.elementAt(0)) /
+              double.parse(numbers.elementAt(1));
+          frameRate = bandwidthCalculate.round();
+        } catch (_) {}
+      } else {
+        frameRate = int.parse(bandwidth);
+      }
       final String? codecs = representation.getAttribute('codecs');
       final String? mimeType = MimeTypes.getMediaMimeType(codecs ?? '');
       tracks.add(BetterPlayerAsmsTrack(

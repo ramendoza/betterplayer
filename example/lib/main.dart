@@ -1,4 +1,4 @@
-import 'package:better_player_example/pages/welcome_page.dart';
+import 'package:better_player_example/pages/dash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.green,
           ),
-          home: WelcomePage(),
+          home: DashPage(),
         ));
   }
 }
